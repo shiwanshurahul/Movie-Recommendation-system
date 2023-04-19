@@ -1,0 +1,97 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red255\green0\blue0;\red247\green150\blue70;\red0\green176\blue80;\red0\green0\blue0;\red155\green187\blue89;}
+{\*\generator Riched20 10.0.22000}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs28\lang9 Project-   \ul\fs32 Movie Recommendation System \ulnone\par
+> \fs22 Used by Various OTT Platforms like Netflix, Prime video\par
+\fs28 1. Content Based: \fs22 Recommends movies based on content,genres being watched by a user.\par
+For example, if the  user has watched a superhero kind of movie, the Platform will next show him the recommended list of superhero kind of movies to watch next.\par
+\fs28 2.Popularity Based: \fs22 It suggests a list of movies which are popular  currently and are in  limelight maybe due to unbelivable action or horrifying title or based on an actress life.\par
+It may be based on current ratings by global media.\par
+ \fs28 3. Collaborative based: \fs22 This type of recommendation system groups people based on their watching pattern.\par
+It represents the general trend of movies watchtime being the data collected by apps.   \par
+\fs28\par
+\ul Workflow:\par
+\ulnone 1.Data collection \fs24 :\par
+ Knowing list of movies ,directors ,titles ,ratings.\par
+We start be importing this data.\par
+\fs28 2. Data Preprocessing:\par
+\fs24 We can check for null values or any incompletency in data and its relevance to our project.\par
+\fs28 3. Feature Extraction: \par
+\fs24 The data after data preprocessing is still only in the form of text i.e (textual data).\par
+We cannot use this feature directly so we need to convert these textual data into into numerical values i.e feature extraction.\par
+TfidfVectorizer is used to transform the textual data to numerical feature vector\par
+so then we can get cosine similarity values.\par
+\fs28 4.Similarity Score:\par
+\fs24 We will try to find similarity score between movies based on anaysis through visualization and importing a dedicated library called difflab library .\par
+\fs28 5.User input:\par
+\fs24 This part is desired output of this project where we would ask from the user about his favourite movie or the movie he has watched the latest, and our trained model will recommend him next 30 movies to watch next.\par
+\ul\fs32 Process:\par
+\ulnone\fs24 -> Import the data and print first 5 rows \par
+\ul\fs28 Analysis + Visualization :\par
+1)\par
+\ulnone ***\par
+\cf1 movies_data.groupby('title')['vote_average'].mean().sort_values(ascending = False).head()\par
+here,\fs24\par
+\cf0 -> movies_data: This is the DataFrame on which the operations are being performed.\par
+-> groupby('title'): This is grouping the data by movie title.\par
+-> ['vote_average']: This selects the column 'vote_average' from the DataFrame.\par
+-> .mean(): This calculates the mean of the 'vote_average' column for each group of movies.\par
+-> .sort_values(ascending=False): This sorts the resulting Series of means in descending order.\par
+.head(): Finally this returns the first five elements of the sorted Series.\par
+Therefore, \cf2 this code will return a list of top-rated movies based on their average ratings\cf0 .\par
+***\fs28\par
+\cf1 movies_data.groupby('title')['vote_average'].count().sort_values(ascending = False).head()\par
+here,\par
+\cf0\fs24 instead of calculating the mean of the 'vote_average' column for each group of movies, we are calculating the count of the 'vote_average' column for each group of movies.\par
+-> Therefore, this code will return a list of movies ranked by the number of votes they received, with the movie having the most votes listed first.\par
+***\par
+\cf1\fs28 -> ratings = pd.DataFrame(movies_data.groupby('title')['vote_average'].mean()) ratings.head()\par
+-> ratings.head()\par
+here,\par
+\cf0\fs24  We will create a new DataFrame named 'ratings' that contains the average rating for each movie in the 'movies_data' DataFrame, with the first five rows of the new DataFrame displayed.\par
+-> Using \cf2 matplotlib library \cf0 we can plot a bar plot between movie title vs vote\lang1033 _count average we just calculated.\par
+-> We can also display a histogram of the vote_average column from the ratings DataFrame,\cf1\fs28\lang9\par
+\cf0\fs24 2)\par
+***\par
+Similarly,\par
+Now, we are grouping movies by their budget, calculating the average popularity of movies within each budget group, sorting the results by descending popularity, and displaying the top five budget values with the highest average popularity.\par
+Then,\par
+ overall,  we are grouping movies by their budget, counting the number of movies within each budget group, sorting the results by descending movie count, and displaying the top five budget values with the most number of movies.\par
+ -> overall, the ratings1 DataFrame contains the average popularity rating for movies in each budget group, where the budget groups are determined by the budget column of the movies_data DataFrame.\par
+-> \cf2  \cf0 we can plot a bar plot between movie Budget vs average popularity\lang1033  we just calculated.\par
+-> We can also display a histogram of the average_popularity column from the ratings DataFrame,\par
+\cf3\ul\fs28 Conclusion: \cf4 It is a well-established trend in the movie industry that higher budget movies tend to receive more popularity and higher ratings and votes than that of lower budget movies. This can be attributed to a number of factors that are typically associated with higher budget films, such as the presence of more visual effects and the ability to create larger than life stories that allow viewers to indulge in their fantasies.\par
+\par
+One potential reason for this trend is that higher budget films can often afford to invest in more advanced and sophisticated visual effects, which can be used to create stunning and immersive visual experiences for viewers. Additionally, these movies may also be able to invest in more elaborate set pieces, costume design, and other production elements that help to create a more immersive and engaging story.\par
+\par
+Another possible reason for this trend is that higher budget films often have more resources available to them, which can be used to hire top-tier actors and directors, as well as to invest in marketing and promotion efforts that can help to build buzz and anticipation for the film's release. This can result in a larger and more engaged audience, which can lead to higher levels of popularity and critical acclaim for the film.\par
+\par
+Overall, the trend of higher budget films receiving more popularity and higher ratings than lower budget films is a reflection of the significant advantages that come with having more resources available to invest in the production and promotion of a film. While there are certainly exceptions to this trend, it remains a reliable indicator of a film's potential success and appeal to audiences.\par
+\ulnone\lang9\par
+\cf0 System Buildup:\fs24\par
+-> creating a list (selected_features)  with 'genres'  , 'keywords', 'tagline' , 'cast',  'director'   as its contents.\par
+-> our textual data may have null contents, which we are going to replace with null string.\par
+-> We are replacing this in our list  (selected_features)  only as it is our desired data to process and not in the whole columns of our csv file.\par
+-> Now,  we will be combining all the 5 selected_features data in their respective columns.\par
+->Now we are going to convert the textual data to feature vector (numerical values) using TfidfVectorizer()  function.\par
+-> We will use the vectorizer data  to fit and transform the combined numerical data using  vectorizer.fit_transform and load in feature_vector variable.\par
+\ul\fs28 Cosine similarity Algorithm comes into picture :\par
+\ulnone\fs24 we  apply cosine similarity function  to the variable feature_vector we just create.\par
+This will get which values  are related to each other and give ultimately the similarity score between movies.\par
+\ul\fs28 Asking Input from the user:\par
+\ulnone\fs24 -> Take input from user\par
+-> Create a list of all the movis name/ title present in the dataset \par
+\ul\fs28 Finding close match:\par
+\ulnone\fs24 -> use \cf1 difflib library \cf0 to find close match of the  movies with the user movie name\par
+-> we will find close_match of the movie name with all the available movies in the   dataset.\par
+Now, taking first value in the close_value list and storing it's index as well to get similarity score later.\par
+-> we will store similarity score of all the movies of our csv file along with their indexes in a list  as:\par
+\cf5 (index value , similarity)\par
+\cf0 -> This will help us in sorting most similar movies based on \cf2 highest similarity_score \cf0 and getting their index.\par
+\ul\fs28 Sorting data based on Similarity score:\par
+\ulnone\fs24 -> sorting the movies based on their similarity (in decreasing order ), so we can find the most similar movies to recommend (based on similarity score we calculated).\par
+-> store this in sorted_similar_movies list\ul\fs28\par
+\ulnone\fs24 -> Lastly, run a loop for 30 times on this list and  print the title of dataset corresponding to the index  to get the first  30 movies for the user to watch  based on his current experience.\par
+\ul\fs28\par
+}
+ 
